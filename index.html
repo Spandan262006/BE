@@ -1,0 +1,1263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module 4 – The Experimental Approach | Behavioural Economics</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=Nunito:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F6F1E9;
+    --card: #FEFCF7;
+    --card-hover: #FFFEF9;
+    --primary: #5C7A5C;
+    --primary-light: #EBF2EB;
+    --accent: #B8714E;
+    --accent-light: #FBF0EA;
+    --blue: #5A7A9C;
+    --blue-light: #EBF0F7;
+    --gold: #A07830;
+    --gold-light: #FBF5E8;
+    --text: #302C26;
+    --text-mid: #5C5448;
+    --text-soft: #8A8278;
+    --border: #DDD4C4;
+    --border-soft: #EDE6D8;
+    --shadow: 0 2px 12px rgba(80,60,40,0.08);
+    --shadow-hover: 0 6px 24px rgba(80,60,40,0.13);
+    --radius: 12px;
+    --radius-sm: 8px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    font-family: 'Nunito', sans-serif;
+    color: var(--text);
+    font-size: 16px;
+    line-height: 1.75;
+  }
+
+  /* ── PROGRESS BAR ── */
+  #progress-bar {
+    position: fixed; top: 0; left: 0; height: 3px;
+    width: 0%; background: linear-gradient(90deg, var(--primary), var(--accent));
+    z-index: 9999; transition: width 0.1s;
+  }
+
+  /* ── TOP NAV ── */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(254,252,247,0.96);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex; align-items: center; gap: 1rem;
+    height: 52px;
+    box-shadow: 0 2px 8px rgba(80,60,40,0.06);
+  }
+  nav a {
+    text-decoration: none; color: var(--text-mid);
+    font-size: 0.78rem; font-weight: 600;
+    letter-spacing: 0.03em; text-transform: uppercase;
+    padding: 4px 10px; border-radius: 20px;
+    transition: all 0.2s;
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+  nav a:hover { background: var(--primary-light); color: var(--primary); }
+  nav .nav-title {
+    font-family: 'Lora', serif; font-size: 0.9rem;
+    font-weight: 700; color: var(--primary);
+    font-style: italic; margin-right: 0.25rem;
+    flex-shrink: 0; white-space: nowrap;
+  }
+  nav .nav-sep { color: var(--border); flex-shrink: 0; }
+  #mobile-nav-links {
+    display: flex; align-items: center; gap: 0.5rem;
+    overflow-x: auto; white-space: nowrap; flex: 1;
+    scrollbar-width: none; -ms-overflow-style: none;
+    padding-bottom: 2px;
+  }
+  #mobile-nav-links::-webkit-scrollbar { display: none; }
+
+  /* ── HERO ── */
+  .hero {
+    background: linear-gradient(135deg, #3D5C3D 0%, #5C7A5C 50%, #7A9E7A 100%);
+    padding: 4rem 2rem 3.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 30% 50%, rgba(255,255,255,0.07) 0%, transparent 60%),
+                radial-gradient(ellipse at 70% 30%, rgba(255,200,150,0.06) 0%, transparent 50%);
+  }
+  .hero-tag {
+    display: inline-block;
+    background: rgba(255,255,255,0.15);
+    color: rgba(255,255,255,0.9);
+    font-size: 0.72rem; font-weight: 700;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    padding: 4px 14px; border-radius: 20px;
+    border: 1px solid rgba(255,255,255,0.25);
+    margin-bottom: 1rem;
+  }
+  .hero h1 {
+    font-family: 'Lora', serif;
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    color: #fff; font-weight: 700;
+    line-height: 1.25; margin-bottom: 0.75rem;
+    position: relative;
+  }
+  .hero p {
+    color: rgba(255,255,255,0.82);
+    font-size: 1.05rem; max-width: 600px;
+    margin: 0 auto 1.5rem; font-weight: 400;
+    position: relative;
+  }
+  .hero-pills {
+    display: flex; gap: 0.5rem; justify-content: center;
+    flex-wrap: wrap; position: relative;
+  }
+  .hero-pill {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.25);
+    color: rgba(255,255,255,0.88);
+    padding: 4px 12px; border-radius: 20px;
+    font-size: 0.78rem; font-weight: 600;
+  }
+
+  /* ── MAIN LAYOUT ── */
+  .container {
+    max-width: 860px; margin: 0 auto;
+    padding: 2.5rem 1.5rem 4rem;
+  }
+
+  /* ── SECTION ── */
+  .section {
+    margin-bottom: 2.5rem;
+    scroll-margin-top: 60px;
+  }
+
+  .section-header {
+    display: flex; align-items: center; gap: 0.75rem;
+    margin-bottom: 1.25rem;
+  }
+  .section-num {
+    background: var(--primary);
+    color: #fff;
+    font-size: 0.7rem; font-weight: 700;
+    letter-spacing: 0.08em;
+    padding: 3px 9px; border-radius: 4px;
+    flex-shrink: 0;
+  }
+  .section h2 {
+    font-family: 'Lora', serif;
+    font-size: 1.45rem; font-weight: 700;
+    color: var(--primary); line-height: 1.2;
+  }
+  .section h3 {
+    font-family: 'Lora', serif;
+    font-size: 1.1rem; font-weight: 600;
+    color: var(--accent); margin: 1.5rem 0 0.65rem;
+    display: flex; align-items: center; gap: 0.4rem;
+  }
+
+  /* ── CARD ── */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border-soft);
+    border-radius: var(--radius);
+    padding: 1.5rem 1.75rem;
+    box-shadow: var(--shadow);
+    margin-bottom: 1rem;
+    transition: box-shadow 0.2s;
+  }
+  .card:hover { box-shadow: var(--shadow-hover); }
+  .card p { margin-bottom: 0.6rem; color: var(--text); }
+  .card p:last-child { margin-bottom: 0; }
+
+  /* ── CALLOUT BOXES ── */
+  .box {
+    border-radius: var(--radius-sm);
+    padding: 1rem 1.25rem;
+    margin: 0.9rem 0;
+    border-left: 4px solid;
+  }
+  .box-exam {
+    background: var(--accent-light);
+    border-color: var(--accent);
+  }
+  .box-concept {
+    background: var(--primary-light);
+    border-color: var(--primary);
+  }
+  .box-example {
+    background: var(--blue-light);
+    border-color: var(--blue);
+  }
+  .box-important {
+    background: var(--gold-light);
+    border-color: var(--gold);
+  }
+  .box-label {
+    font-size: 0.68rem; font-weight: 700;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    margin-bottom: 0.35rem;
+  }
+  .box-exam .box-label { color: var(--accent); }
+  .box-concept .box-label { color: var(--primary); }
+  .box-example .box-label { color: var(--blue); }
+  .box-important .box-label { color: var(--gold); }
+  .box p { font-size: 0.95rem; color: var(--text); }
+  .box p + p { margin-top: 0.35rem; }
+  .box strong { color: var(--text); }
+
+  /* ── TERM GRID ── */
+  .term-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0.75rem; margin: 0.75rem 0;
+  }
+  .term-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 0.9rem 1rem;
+  }
+  .term-card .term-name {
+    font-weight: 700; font-size: 0.88rem;
+    color: var(--primary); margin-bottom: 0.3rem;
+  }
+  .term-card .term-def {
+    font-size: 0.85rem; color: var(--text-mid);
+    line-height: 1.55;
+  }
+
+  /* ── EXPERIMENT TABLE ── */
+  .exp-table {
+    width: 100%; border-collapse: collapse;
+    margin: 0.75rem 0; font-size: 0.88rem;
+  }
+  .exp-table th {
+    background: var(--primary);
+    color: #fff; font-weight: 700;
+    padding: 8px 12px; text-align: left;
+    font-size: 0.8rem; letter-spacing: 0.04em;
+  }
+  .exp-table th:first-child { border-radius: 6px 0 0 0; }
+  .exp-table th:last-child { border-radius: 0 6px 0 0; }
+  .exp-table td {
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--border-soft);
+    vertical-align: top;
+    color: var(--text);
+  }
+  .exp-table tr:last-child td { border-bottom: none; }
+  .exp-table tr:nth-child(even) td { background: rgba(92,122,92,0.04); }
+  .exp-table td strong { color: var(--primary); }
+
+  /* ── TIMELINE ── */
+  .timeline { position: relative; padding-left: 1.75rem; margin: 0.5rem 0; }
+  .timeline::before {
+    content: ''; position: absolute;
+    left: 6px; top: 4px; bottom: 4px;
+    width: 2px; background: var(--border);
+    border-radius: 2px;
+  }
+  .tl-item {
+    position: relative; margin-bottom: 1.1rem;
+    padding-bottom: 0.1rem;
+  }
+  .tl-item:last-child { margin-bottom: 0; }
+  .tl-item::before {
+    content: ''; position: absolute;
+    left: -1.45rem; top: 6px;
+    width: 10px; height: 10px;
+    border-radius: 50%; border: 2px solid var(--primary);
+    background: var(--card);
+  }
+  .tl-year {
+    font-weight: 700; font-size: 0.78rem;
+    color: var(--accent); letter-spacing: 0.05em;
+    margin-bottom: 0.1rem;
+  }
+  .tl-title { font-weight: 600; color: var(--text); font-size: 0.95rem; }
+  .tl-desc { font-size: 0.88rem; color: var(--text-mid); margin-top: 0.15rem; line-height: 1.55; }
+
+  /* ── ETHICS CARDS ── */
+  .ethics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(185px, 1fr));
+    gap: 0.75rem; margin: 0.75rem 0;
+  }
+  .ethics-card {
+    background: var(--card);
+    border: 1px solid #E8D5CA;
+    border-top: 3px solid var(--accent);
+    border-radius: var(--radius-sm);
+    padding: 1rem 1.05rem;
+  }
+  .ethics-card .ec-year {
+    font-size: 0.72rem; font-weight: 700;
+    color: var(--accent); letter-spacing: 0.08em; text-transform: uppercase;
+    margin-bottom: 0.2rem;
+  }
+  .ethics-card .ec-name {
+    font-weight: 700; font-size: 0.92rem;
+    color: var(--text); margin-bottom: 0.35rem;
+  }
+  .ethics-card .ec-desc {
+    font-size: 0.83rem; color: var(--text-mid); line-height: 1.5;
+  }
+
+  /* ── BELMONT PILLARS ── */
+  .pillars {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 0.75rem; margin: 0.75rem 0;
+  }
+  @media(max-width:600px){ .pillars { grid-template-columns: 1fr; } }
+  .pillar {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 1.1rem 1rem;
+    text-align: center;
+  }
+  .pillar-icon {
+    font-size: 1.6rem; margin-bottom: 0.5rem;
+  }
+  .pillar-name {
+    font-family: 'Lora', serif;
+    font-weight: 700; font-size: 0.95rem;
+    color: var(--primary); margin-bottom: 0.4rem;
+  }
+  .pillar-desc {
+    font-size: 0.82rem; color: var(--text-mid); line-height: 1.5;
+  }
+
+  /* ── IRB TABLE ── */
+  .irb-grid {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 0.75rem; margin: 0.75rem 0;
+  }
+  @media(max-width:580px){ .irb-grid { grid-template-columns: 1fr; } }
+  .irb-card {
+    border-radius: var(--radius-sm);
+    padding: 1rem;
+    border: 1px solid var(--border);
+  }
+  .irb-card:nth-child(1) { background: #F0F7F0; border-color: #9DC09D; }
+  .irb-card:nth-child(2) { background: #F0F4F9; border-color: #9DB8D0; }
+  .irb-card:nth-child(3) { background: var(--accent-light); border-color: #D4A090; }
+  .irb-card .irb-label {
+    font-weight: 700; font-size: 0.82rem;
+    letter-spacing: 0.05em; text-transform: uppercase;
+    margin-bottom: 0.35rem;
+  }
+  .irb-card:nth-child(1) .irb-label { color: #3D6B3D; }
+  .irb-card:nth-child(2) .irb-label { color: var(--blue); }
+  .irb-card:nth-child(3) .irb-label { color: var(--accent); }
+  .irb-card p { font-size: 0.85rem; color: var(--text-mid); line-height: 1.5; }
+
+  /* ── PROJECT STEPS ── */
+  .steps {
+    counter-reset: step;
+    display: flex; flex-direction: column; gap: 0.75rem;
+    margin: 0.75rem 0;
+  }
+  .step {
+    display: flex; gap: 1rem;
+    background: var(--card);
+    border: 1px solid var(--border-soft);
+    border-radius: var(--radius-sm);
+    padding: 1rem 1.15rem;
+  }
+  .step-num {
+    counter-increment: step;
+    width: 30px; height: 30px;
+    background: var(--primary); color: #fff;
+    border-radius: 50%; display: flex;
+    align-items: center; justify-content: center;
+    font-weight: 700; font-size: 0.85rem;
+    flex-shrink: 0; margin-top: 1px;
+  }
+  .step-body { flex: 1; }
+  .step-title { font-weight: 700; color: var(--text); margin-bottom: 0.25rem; font-size: 0.95rem; }
+  .step-desc { font-size: 0.88rem; color: var(--text-mid); line-height: 1.55; }
+
+  /* ── REVISION SUMMARY ── */
+  .revision {
+    background: linear-gradient(135deg, #3D5C3D 0%, #5C7A5C 100%);
+    border-radius: var(--radius);
+    padding: 2rem 2rem;
+    margin-top: 2rem;
+    color: rgba(255,255,255,0.92);
+    scroll-margin-top: 60px;
+  }
+  .revision h2 {
+    font-family: 'Lora', serif;
+    color: #fff; font-size: 1.4rem;
+    margin-bottom: 1.25rem;
+    display: flex; align-items: center; gap: 0.6rem;
+  }
+  .rev-cols {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1rem;
+  }
+  .rev-block {
+    background: rgba(255,255,255,0.1);
+    border-radius: var(--radius-sm);
+    padding: 1rem 1.1rem;
+    border: 1px solid rgba(255,255,255,0.15);
+  }
+  .rev-block h4 {
+    font-size: 0.75rem; font-weight: 700;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: rgba(255,255,255,0.65); margin-bottom: 0.6rem;
+  }
+  .rev-block ul { list-style: none; padding: 0; }
+  .rev-block li {
+    font-size: 0.88rem; color: rgba(255,255,255,0.88);
+    padding: 0.3rem 0; border-bottom: 1px solid rgba(255,255,255,0.1);
+    line-height: 1.5;
+  }
+  .rev-block li:last-child { border-bottom: none; }
+  .rev-block li strong { color: #fff; }
+
+  /* ── MUST-REMEMBER ── */
+  .must-remember {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: var(--radius-sm);
+    padding: 1.1rem 1.25rem;
+    margin-top: 1rem;
+  }
+  .must-remember h4 {
+    font-size: 0.75rem; font-weight: 700;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: rgba(255,255,255,0.65); margin-bottom: 0.6rem;
+  }
+  .must-remember ul { list-style: none; padding: 0; }
+  .must-remember li {
+    font-size: 0.88rem; color: rgba(255,255,255,0.88);
+    padding: 0.3rem 0 0.3rem 1.2rem;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    position: relative; line-height: 1.5;
+  }
+  .must-remember li:last-child { border-bottom: none; }
+  .must-remember li::before {
+    content: '✓';
+    position: absolute; left: 0;
+    color: #8FCF8F; font-weight: 700; font-size: 0.8rem;
+  }
+
+  /* ── DIVIDER ── */
+  .divider {
+    height: 1px; background: var(--border-soft);
+    margin: 1.5rem 0;
+  }
+
+  /* ── UTILITY ── */
+  p { margin-bottom: 0.5rem; }
+  p:last-child { margin-bottom: 0; }
+  strong { font-weight: 700; }
+  em { font-style: italic; }
+
+  ul.content-list {
+    padding-left: 1.2rem;
+    margin: 0.4rem 0 0.5rem;
+  }
+  ul.content-list li {
+    margin-bottom: 0.3rem;
+    font-size: 0.95rem;
+    color: var(--text);
+    line-height: 1.65;
+  }
+  ul.content-list li::marker { color: var(--primary); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--card);
+    border-top: 1px solid var(--border);
+    text-align: center;
+    padding: 1.25rem;
+    font-size: 0.8rem;
+    color: var(--text-soft);
+  }
+  footer span { color: var(--primary); font-weight: 600; }
+
+  /* ── SCROLL TOP BTN ── */
+  #scroll-top {
+    position: fixed; bottom: 1.5rem; right: 1.5rem;
+    width: 42px; height: 42px;
+    background: var(--primary); color: #fff;
+    border: none; border-radius: 50%;
+    cursor: pointer; font-size: 1.1rem;
+    box-shadow: 0 4px 12px rgba(92,122,92,0.4);
+    opacity: 0; transition: opacity 0.3s;
+    z-index: 200;
+  }
+  #scroll-top.visible { opacity: 1; }
+  #scroll-top:hover { background: #4A6741; }
+
+  /* ════════════════════════════════════════
+     MOBILE RESPONSIVE
+  ════════════════════════════════════════ */
+
+  /* ── Hamburger menu button (hidden on desktop) ── */
+  #menu-btn {
+    display: none;
+    background: none; border: none;
+    cursor: pointer; padding: 6px 8px;
+    flex-shrink: 0; color: var(--text-mid);
+    font-size: 1.2rem; line-height: 1;
+  }
+  #mobile-nav-links {
+    display: flex; align-items: center; gap: 1rem;
+    overflow-x: auto; white-space: nowrap;
+    flex: 1;
+  }
+  /* Hide scrollbar on mobile nav */
+  #mobile-nav-links::-webkit-scrollbar { display: none; }
+  #mobile-nav-links { -ms-overflow-style: none; scrollbar-width: none; }
+
+  /* ── Tablet: ≤ 768px ── */
+  @media (max-width: 768px) {
+    nav { padding: 0 0.9rem; gap: 0.6rem; height: 48px; }
+    nav a { font-size: 0.73rem; padding: 4px 8px; }
+    nav .nav-title { font-size: 0.84rem; }
+    .hero { padding: 2.75rem 1.5rem 2.5rem; }
+    .hero h1 { font-size: clamp(1.5rem, 5vw, 2.2rem); }
+    .hero p { font-size: 0.98rem; }
+    .container { padding: 2rem 1.15rem 3.5rem; }
+    .card { padding: 1.2rem 1.25rem; }
+    .revision { padding: 1.6rem 1.4rem; }
+    .section h2 { font-size: 1.25rem; }
+    .section h3 { font-size: 1.02rem; }
+    .timeline { padding-left: 1.5rem; }
+    .tl-desc { font-size: 0.86rem; }
+    .exp-table { font-size: 0.84rem; }
+    .box p { font-size: 0.91rem; }
+    .rev-block li { font-size: 0.85rem; }
+    .must-remember li { font-size: 0.85rem; }
+    .pillar { padding: 1rem 0.9rem; }
+    .step-title { font-size: 0.92rem; }
+    .step-desc { font-size: 0.86rem; }
+  }
+
+  /* ── Mobile: ≤ 520px ── */
+  @media (max-width: 520px) {
+    body { font-size: 15px; }
+
+    /* Compact nav — show only essential links */
+    nav { padding: 0 0.75rem; gap: 0.4rem; height: 46px; }
+    nav .nav-title { font-size: 0.78rem; letter-spacing: 0; }
+    nav .nav-sep { display: none; }
+    nav a { font-size: 0.68rem; padding: 4px 7px; min-height: 32px; display: flex; align-items: center; }
+
+    .hero { padding: 2rem 1rem 2rem; }
+    .hero-tag { font-size: 0.65rem; }
+    .hero h1 { font-size: 1.45rem; }
+    .hero p { font-size: 0.9rem; }
+    .hero-pill { font-size: 0.69rem; padding: 3px 8px; }
+
+    .container { padding: 1.4rem 0.9rem 2.5rem; }
+
+    .section-header { gap: 0.55rem; flex-wrap: wrap; }
+    .section-num { font-size: 0.63rem; padding: 2px 7px; }
+    .section h2 { font-size: 1.05rem; line-height: 1.3; }
+    .section h3 { font-size: 0.97rem; margin: 1.25rem 0 0.55rem; }
+
+    .card { padding: 0.95rem 1rem; border-radius: 10px; }
+    .box { padding: 0.8rem 0.95rem; }
+    .box-label { font-size: 0.64rem; }
+    .box p { font-size: 0.87rem; }
+
+    /* Collapse term/ethics grids to single column */
+    .term-grid { grid-template-columns: 1fr; gap: 0.6rem; }
+    .ethics-grid { grid-template-columns: 1fr; }
+    .irb-grid { grid-template-columns: 1fr; }
+    .pillars { grid-template-columns: 1fr; }
+
+    .term-card { padding: 0.8rem 0.9rem; }
+    .term-card .term-name { font-size: 0.84rem; }
+    .term-card .term-def { font-size: 0.82rem; }
+
+    .ethics-card { padding: 0.9rem 0.95rem; }
+    .ethics-card .ec-desc { font-size: 0.81rem; }
+
+    /* Step layout stays horizontal but tighter */
+    .step { padding: 0.9rem 0.95rem; gap: 0.7rem; }
+    .step-num { width: 27px; height: 27px; font-size: 0.78rem; }
+    .step-title { font-size: 0.9rem; }
+    .step-desc { font-size: 0.84rem; }
+
+    /* Timeline */
+    .timeline { padding-left: 1.4rem; }
+    .tl-year { font-size: 0.74rem; }
+    .tl-title { font-size: 0.9rem; }
+    .tl-desc { font-size: 0.84rem; }
+    .tl-item { margin-bottom: 0.95rem; }
+    .tl-item::before { width: 9px; height: 9px; left: -1.2rem; }
+
+    /* Pillar */
+    .pillar { padding: 0.9rem 0.85rem; text-align: left; display: flex; gap: 0.75rem; align-items: flex-start; }
+    .pillar-icon { font-size: 1.4rem; margin-bottom: 0; flex-shrink: 0; margin-top: 2px; }
+    .pillar-name { font-size: 0.9rem; margin-bottom: 0.3rem; }
+    .pillar-desc { font-size: 0.81rem; }
+
+    /* IRB cards */
+    .irb-card { padding: 0.9rem; }
+    .irb-card .irb-label { font-size: 0.76rem; }
+    .irb-card p { font-size: 0.82rem; }
+
+    ul.content-list li { font-size: 0.88rem; }
+
+    /* Revision */
+    .revision { padding: 1.3rem 1rem; border-radius: 10px; }
+    .revision h2 { font-size: 1.15rem; gap: 0.4rem; margin-bottom: 1rem; }
+    .rev-cols { grid-template-columns: 1fr; gap: 0.75rem; }
+    .rev-block { padding: 0.85rem 0.9rem; }
+    .rev-block h4 { font-size: 0.7rem; margin-bottom: 0.5rem; }
+    .rev-block li { font-size: 0.83rem; padding: 0.28rem 0; }
+    .must-remember { padding: 0.9rem 0.95rem; margin-top: 0.75rem; }
+    .must-remember h4 { font-size: 0.7rem; }
+    .must-remember li { font-size: 0.83rem; padding: 0.28rem 0 0.28rem 1.1rem; }
+
+    /* Scroll-to-top button */
+    #scroll-top { bottom: 1rem; right: 1rem; width: 40px; height: 40px; font-size: 1rem; }
+
+    /* Footer */
+    footer { font-size: 0.76rem; padding: 1rem; }
+  }
+
+  /* ── Very small phones: ≤ 360px ── */
+  @media (max-width: 360px) {
+    body { font-size: 14px; }
+    .hero h1 { font-size: 1.3rem; }
+    .container { padding: 1.2rem 0.75rem 2rem; }
+    nav .nav-title { display: none; }
+    .section h2 { font-size: 1rem; }
+    .card { padding: 0.85rem 0.9rem; }
+    .box { padding: 0.75rem 0.85rem; }
+    .step { padding: 0.8rem 0.85rem; }
+    .revision { padding: 1.1rem 0.9rem; }
+  }
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+
+<!-- NAV -->
+<nav>
+  <span class="nav-title">BE · M4</span>
+  <span class="nav-sep">|</span>
+  <div id="mobile-nav-links">
+    <a href="#overview">Overview</a>
+    <a href="#history">History</a>
+    <a href="#social-lab">Social &amp; Lab</a>
+    <a href="#typology">Types</a>
+    <a href="#non-random">Non-RCT</a>
+    <a href="#ethics-fail">Failures</a>
+    <a href="#belmont">Belmont</a>
+    <a href="#irb">IRBs</a>
+    <a href="#project">Project</a>
+    <a href="#revision">Revision</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-tag">Behavioural Economics</div>
+  <h1>Module 4 · The Experimental Approach</h1>
+  <p>How controlled studies reveal the truth about human behaviour — causal inference, ethics, and real-world research design.</p>
+  <div class="hero-pills">
+    <span class="hero-pill">📚 4.1 Experimental Ideal</span>
+    <span class="hero-pill">🔬 4.2 Types of Experiments</span>
+    <span class="hero-pill">⚖️ 4.3 Ethics</span>
+    <span class="hero-pill">📊 4.4 Project Design</span>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- ═══════════════════════════════════════════
+     4.0 OVERVIEW
+═══════════════════════════════════════════ -->
+<div class="section" id="overview">
+  <div class="section-header">
+    <span class="section-num">4.0</span>
+    <h2>Overview — Why Experiments?</h2>
+  </div>
+  <div class="card">
+    <p>Behavioural economics sits at the intersection of <strong>psychology</strong> and <strong>economics</strong>. While theory tells us how rational "Econs" <em>should</em> behave, experiments reveal how real humans <em>actually</em> behave. The experimental approach is the discipline's primary tool for generating reliable knowledge about decision-making.</p>
+    <div class="box box-concept">
+      <div class="box-label">🧠 Core Purpose</div>
+      <p>Experiments allow researchers to <strong>observe real human choices</strong> in controlled settings, test theoretical predictions, and discover <strong>behavioural facts</strong> (like self-control issues, cognitive biases, and social preferences). The key advantage is <strong>causal inference</strong> — by manipulating one variable while holding everything else constant, you can prove that A <em>causes</em> B, not just that A and B are correlated.</p>
+    </div>
+    <div class="box box-exam">
+      <div class="box-label">📝 Exam Insight</div>
+      <p>The critical distinction in this module is <strong>correlation vs. causation</strong>. A survey can show a correlation ("gym members are healthier"). An experiment can prove causation ("going to the gym makes people healthier"). Experiments are superior because they eliminate confounding variables.</p>
+    </div>
+  </div>
+  <div class="card">
+    <p><strong>Behavioural Facts</strong> discovered through experiments include:</p>
+    <ul class="content-list">
+      <li>People exhibit <strong>self-control problems</strong> — they plan to exercise but don't follow through.</li>
+      <li>Cognitive biases (anchoring, loss aversion) reliably influence choices.</li>
+      <li>Social preferences (fairness, reciprocity) shape economic decisions.</li>
+      <li>Human strategic thinking is limited, not infinitely rational.</li>
+    </ul>
+    <div class="box box-important">
+      <div class="box-label">⚠️ Key Distinction</div>
+      <p><strong>Unlike observational data</strong> (where you watch what happens naturally), experiments let you <strong>actively manipulate</strong> one thing and measure its effect. This is why the experimental approach is called the "gold standard" for causal inference in both medicine and economics.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     4.1.1 HISTORY
+═══════════════════════════════════════════ -->
+<div class="section" id="history">
+  <div class="section-header">
+    <span class="section-num">4.1.1</span>
+    <h2>History of Randomized Experiments</h2>
+  </div>
+  <div class="card">
+    <p>The idea of testing hypotheses through controlled, randomized experiments originated in <strong>medicine</strong> before migrating to economics and social sciences. Here is the full historical arc you need to know:</p>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-year">1774</div>
+        <div class="tl-title">James Lind — The First Randomized Trial</div>
+        <div class="tl-desc">Conducted one of the earliest controlled experiments to find a cure for <strong>scurvy</strong> among sailors. He divided sailors into groups and administered different treatments (including lemons to one group), comparing outcomes. This established the basic logic of randomization — give one group the treatment, give another group nothing (control), and see what happens.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">Early 1900s</div>
+        <div class="tl-title">Ronald Fisher — Formalizing Randomization</div>
+        <div class="tl-desc">The statistician who gave randomized experiments their mathematical foundations. His books <em>Statistical Methods for Research Workers</em> and <em>The Design of Experiments</em> established that <strong>random assignment</strong> (randomly deciding who gets the treatment) is the key mechanism for causal inference. Fisher's work is why we trust RCTs today.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">1948</div>
+        <div class="tl-title">Austin Bradford Hill — Medical RCTs Enter Modern Era</div>
+        <div class="tl-desc">Used <strong>Randomized Control Trials (RCTs)</strong> to test <strong>streptomycin</strong> as a treatment for <strong>tuberculosis (TB)</strong>. This is considered one of the first properly conducted medical RCTs in the modern sense — formally randomizing who gets the drug and who doesn't.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">1954</div>
+        <div class="tl-title">Jonas Salk — Polio Vaccine &amp; Double-Blind RCT</div>
+        <div class="tl-desc">Developed the <strong>polio vaccine</strong> through a massive <strong>double-blind RCT</strong> — neither the participants nor the researchers administering the vaccine knew who received the real vaccine vs. the placebo. Used <strong>Fisher's exact test</strong> to measure treatment effects. This remains one of the largest and most famous clinical trials in history.</div>
+      </div>
+    </div>
+    <div class="box box-exam">
+      <div class="box-label">📝 Must Know for Exams</div>
+      <p><strong>Lind (1774)</strong> → scurvy/lemons. <strong>Fisher</strong> → formalized randomization. <strong>Hill (1948)</strong> → streptomycin/TB. <strong>Salk (1954)</strong> → polio, double-blind, Fisher's exact test. These are frequently tested as short-answer or MCQ questions.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     4.1.2 SOCIAL & LABORATORY EXPERIMENTS
+═══════════════════════════════════════════ -->
+<div class="section" id="social-lab">
+  <div class="section-header">
+    <span class="section-num">4.1.2</span>
+    <h2>Social &amp; Laboratory Experiments</h2>
+  </div>
+  <div class="card">
+    <p>These experiments moved the methodology into <strong>economics and social science</strong>, studying individual decisions and strategic interactions rather than just medical outcomes.</p>
+
+    <h3>🏛️ Individual Decision-Making Experiments</h3>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-year">1931 — Thurstone</div>
+        <div class="tl-title">Mapping Indifference Curves in a Lab</div>
+        <div class="tl-desc">Used laboratory experiments to empirically deduce <strong>indifference curves</strong> between pairs of goods (e.g., hats and shoes). This was one of the first attempts to test fundamental microeconomic theory about consumer preferences in a controlled setting.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">1944 — Von Neumann &amp; Morgenstern</div>
+        <div class="tl-title">Utility Curves and Risk Behaviour</div>
+        <div class="tl-desc">Proposed using <strong>experiments to construct utility curves</strong> and empirically test theoretical predictions about how people make decisions under risk. Their work laid the foundation for Expected Utility Theory — and later for experiments that showed humans <em>violate</em> these predictions (e.g., via Prospect Theory).</div>
+      </div>
+    </div>
+
+    <h3>🤝 Social Interaction Experiments</h3>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-year">1950 — Dresher &amp; Flood</div>
+        <div class="tl-title">The Prisoner's Dilemma in the Lab</div>
+        <div class="tl-desc">First implemented the famous <strong>Prisoner's Dilemma</strong> in a laboratory setting. Key finding: human participants <strong>rarely reach the pure Nash Equilibrium</strong> (mutual defection), but they also don't perfectly achieve the socially efficient outcome (mutual cooperation). Real humans are more cooperative than theory predicts, but imperfectly so.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">1982 — Güth, Schmittberger &amp; Schwarze</div>
+        <div class="tl-title">The Ultimatum Game</div>
+        <div class="tl-desc">Developed the <strong>Ultimatum Game</strong>, a cornerstone of behavioural bargaining research. In this game, Player 1 proposes how to split a sum of money; Player 2 either accepts (both get the split) or rejects (both get nothing). Theory predicts Player 1 should offer the minimum and Player 2 should accept anything. Reality: players offer ~40-50%, and low offers are rejected out of <strong>fairness concerns</strong>.</div>
+      </div>
+    </div>
+
+    <h3>🏥 Policy-Oriented Social Experiments</h3>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-year">1971–1982 — RAND Corporation</div>
+        <div class="tl-title">Health Insurance Experiment</div>
+        <div class="tl-desc">One of the largest social experiments ever conducted. Studied the <strong>causal effect of health insurance</strong> coverage on usage. Key finding: increasing <strong>cost-sharing (copay)</strong> — making patients pay a portion of costs — led to fewer hospital and dental visits and lower overall spending. Crucially, this <strong>did not necessarily harm health outcomes</strong>, suggesting some healthcare is discretionary.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">1977 — Burtless &amp; Hausman</div>
+        <div class="tl-title">The Negative Income Tax Experiment (US/Canada)</div>
+        <div class="tl-desc">Tested the effect of providing <strong>unconditional cash transfers to the poor</strong>. Two surprising findings: (1) providing basic income had <strong>no significant effect on individual labor supply</strong> — people didn't stop working; (2) it <strong>unexpectedly increased divorce rates</strong>, as financial independence gave partners the ability to leave unhappy marriages.</div>
+      </div>
+    </div>
+
+    <div class="box box-exam">
+      <div class="box-label">📝 Exam Tip — Common Question Format</div>
+      <p>You may be asked: "What did the RAND experiment find?" → <strong>Higher copay → less usage, without harming health.</strong> Or: "What did the Negative Income Tax experiment show?" → <strong>No effect on labor supply, but increased divorce rates.</strong> Know both the experiment AND its unexpected findings.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     4.2.1 TYPOLOGY OF EXPERIMENTS
+═══════════════════════════════════════════ -->
+<div class="section" id="typology">
+  <div class="section-header">
+    <span class="section-num">4.2.1</span>
+    <h2>Typology of Experiments</h2>
+  </div>
+  <div class="card">
+    <p>Not all experiments are identical. They differ in where they are conducted (the environment) and who participates (the subject pool). Here are the four main types:</p>
+
+    <h3>🧪 1. Laboratory Experiments</h3>
+    <p>Conducted in a controlled lab setting, usually with students or volunteers on a university campus.</p>
+    <div class="term-grid">
+      <div class="term-card">
+        <div class="term-name">Precision</div>
+        <div class="term-def">High degree of control over data collection. Every aspect of the environment is controlled — the room, the instructions, the timing, the payoffs.</div>
+      </div>
+      <div class="term-card">
+        <div class="term-name">Incentivization</div>
+        <div class="term-def">Participants are <strong>paid based on their decisions</strong> (e.g., whatever they win in the game). This ensures their choices reflect real preferences, not hypothetical ones.</div>
+      </div>
+      <div class="term-card">
+        <div class="term-name">WEIRD Criticism</div>
+        <div class="term-def">Subjects are typically <strong>W</strong>estern, <strong>E</strong>ducated, <strong>I</strong>ndustrialized, <strong>R</strong>ich, <strong>D</strong>emocratic. Results may not generalize to the rest of humanity.</div>
+      </div>
+    </div>
+    <div class="box box-important">
+      <div class="box-label">⚠️ WEIRD — Know This Acronym Cold</div>
+      <p><strong>W</strong>estern · <strong>E</strong>ducated · <strong>I</strong>ndustrialized · <strong>R</strong>ich · <strong>D</strong>emocratic. This is the standard criticism of lab experiments — they over-rely on a very specific, unrepresentative slice of humanity (usually Western university students). This raises concerns about <strong>external validity</strong> — can we generalize findings to, say, subsistence farmers in rural India?</p>
+    </div>
+
+    <h3>🌾 2. Lab-in-the-Field (Artefactual Field Experiments)</h3>
+    <p>Researchers take the <strong>controlled lab setup out into the real world</strong> — for example, setting up a mini-lab in a village community centre and running experiments with local farmers or residents as subjects.</p>
+    <div class="box box-concept">
+      <div class="box-label">🧠 Key Advantage</div>
+      <p>This bridges the gap between theory and real-world context. You get the <strong>precision of a lab</strong> (controlled instructions, monetary incentives) with a <strong>more representative subject pool</strong> (not WEIRD students). It resolves the external validity problem partially.</p>
+    </div>
+
+    <h3>💻 3. Online and Survey Experiments</h3>
+    <p>Conducted via platforms like <strong>Amazon MTurk, Prolific, or Qualtrics</strong> — participants complete tasks online from anywhere in the world.</p>
+    <div class="exp-table-wrapper" style="overflow-x:auto;">
+      <table class="exp-table">
+        <tr>
+          <th>✅ Advantages</th>
+          <th>❌ Disadvantages</th>
+        </tr>
+        <tr>
+          <td>Low cost, fast, large scale</td>
+          <td>No control over environment</td>
+        </tr>
+        <tr>
+          <td>High geographic diversity (generalizable)</td>
+          <td>Risk of AI/bot responses</td>
+        </tr>
+        <tr>
+          <td>Can reach specific demographics easily</td>
+          <td>Time-limited (20–30 min max attention span)</td>
+        </tr>
+      </table>
+    </div>
+
+    <h3>🏙️ 4. Field Experiments and RCTs</h3>
+    <p>Participants are observed in their <strong>everyday, natural environments</strong> — schools, factories, hospitals, markets — often without knowing they are being studied.</p>
+    <div class="box box-concept">
+      <div class="box-label">🧠 Two Critical Biases They Eliminate</div>
+      <p><strong>Social Desirability Bias:</strong> When people <em>know</em> they're being watched, they change their behaviour to look good. Field experiments avoid this because participants don't know they're in a study.<br><br>
+      <strong>Hawthorne Effect:</strong> The well-known phenomenon where people change their behaviour simply because they are being observed, regardless of the actual treatment. Field experiments in natural settings minimize this.</p>
+    </div>
+    <div class="box box-important">
+      <div class="box-label">⚠️ Field Experiment vs. RCT — Subtle But Important</div>
+      <p><strong>Field experiments</strong> often test precise theoretical predictions (e.g., does a certain incentive change effort?). <strong>RCTs (Randomized Control Trials)</strong> are more directly linked to evaluating specific <em>policies</em> in the real world (e.g., do free bed nets reduce malaria?). Both are conducted in the field — the distinction lies in their <em>purpose</em>. RCTs are considered the <strong>"gold standard" for policy evaluation</strong> — associated with Nobel laureates <strong>Banerjee, Duflo, and Kremer</strong>.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     4.2.2 NON-RANDOMIZED EXPERIMENTS
+═══════════════════════════════════════════ -->
+<div class="section" id="non-random">
+  <div class="section-header">
+    <span class="section-num">4.2.2</span>
+    <h2>Non-Randomized Experiments</h2>
+  </div>
+  <div class="card">
+    <p>Sometimes, <strong>pure randomization is impossible</strong> — you cannot randomly assign someone to be born into poverty, or randomly assign a country to have a civil war. In these cases, researchers use clever alternative designs:</p>
+
+    <h3>🌍 Natural Experiments</h3>
+    <div class="box box-concept">
+      <div class="box-label">🧠 What Is It?</div>
+      <p>A natural experiment exploits an <strong>external shock or naturally-occurring event</strong> that randomly (or as-if randomly) affects some people but not others. The researcher didn't create the experiment — nature or policy did.</p>
+    </div>
+    <div class="box box-example">
+      <div class="box-label">🔍 Classic Example: Rwanda Terrain Study</div>
+      <p>Researchers used <strong>Rwanda's terrain</strong> (mountainous vs. flat areas) to study the impact of radio nation-building programs on inter-ethnic <strong>trust</strong>. Terrain is essentially random — it determines who could and couldn't receive radio signals — so radio access was "as good as random." This allowed causal inference about radio's effect on trust without any experimental manipulation.</p>
+    </div>
+
+    <h3>📅 Quasi-Experiments</h3>
+    <div class="box box-concept">
+      <div class="box-label">🧠 What Is It?</div>
+      <p>Compare the same group <strong>before and after</strong> an event (a policy change, a harvest, a life event). The group serves as its own control — eliminating individual-level variation.</p>
+    </div>
+    <div class="box box-example">
+      <div class="box-label">🔍 Classic Example: Farmers &amp; Cognitive Bandwidth</div>
+      <p>Researchers studied farmers' <strong>cognitive ability before vs. after harvest</strong>. Before harvest, farmers are poor and financially stressed (scarce resources → tunnel vision). After harvest, they have money. The same farmer performed better on cognitive tests after harvest — showing that <strong>poverty itself impairs cognition</strong>, not innate ability. The harvest timing is a natural event that creates the quasi-experimental comparison.</p>
+    </div>
+
+    <h3>🌐 Cross-Cultural Studies</h3>
+    <div class="box box-concept">
+      <div class="box-label">🧠 What Is It?</div>
+      <p>Run the <strong>same experiment in different societies</strong> with different cultural norms, structures, or histories. If behaviour differs systematically across societies, it suggests behaviour is shaped by <strong>nurture (culture/environment)</strong> rather than <strong>nature (biology/universal psychology)</strong>.</p>
+    </div>
+    <div class="box box-example">
+      <div class="box-label">🔍 Classic Example: Gneezy &amp; List — Matrilineal vs. Patriarchal</div>
+      <p>Compared <strong>competition preferences</strong> between two societies: a matrilineal tribe (Khasi in India, where women inherit property and hold social power) and a patriarchal tribe. In the matrilineal society, <strong>women were equally competitive as men</strong>. In the patriarchal society, men dominated competitive environments. Conclusion: the gender gap in competitiveness is <strong>not biologically hardwired</strong> — it is a product of social norms. Behaviour is nurture, not nature.</p>
+    </div>
+
+    <div class="box box-exam">
+      <div class="box-label">📝 Exam Tip</div>
+      <p>The three types exist because randomization is sometimes impossible. Know the <em>defining feature</em> of each: Natural = external shock exploited; Quasi = before-after comparison; Cross-cultural = same experiment, different societies to test nature vs. nurture.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     4.3.1 HISTORICAL ETHICAL FAILURES
+═══════════════════════════════════════════ -->
+<div class="section" id="ethics-fail">
+  <div class="section-header">
+    <span class="section-num">4.3.1</span>
+    <h2>Historical Ethical Failures</h2>
+  </div>
+  <div class="card">
+    <p>Modern research ethics emerged <em>directly</em> in response to horrific abuses. Understanding these cases is essential — they explain <em>why</em> every rule that follows exists.</p>
+    <div class="ethics-grid">
+      <div class="ethics-card">
+        <div class="ec-year">1943–1945</div>
+        <div class="ec-name">🇩🇪 Nazi Experiments</div>
+        <div class="ec-desc">Medical torture of <strong>twins and other prisoners</strong> in concentration camps under the pretext of genetic research. Conducted without consent, causing immense suffering and death. Led directly to the Nuremberg Code, the first international standard for human experimentation.</div>
+      </div>
+      <div class="ethics-card">
+        <div class="ec-year">1932–1972</div>
+        <div class="ec-name">🩺 Tuskegee Syphilis Study</div>
+        <div class="ec-desc">African American men with syphilis were <strong>deliberately denied penicillin</strong> (a known cure) so researchers could study the untreated progression of the disease. Continued for 40 years. Left survivors with serious health consequences and devastated trust in medical institutions.</div>
+      </div>
+      <div class="ethics-card">
+        <div class="ec-year">1961</div>
+        <div class="ec-name">⚡ Milgram Obedience Experiment</div>
+        <div class="ec-desc">Participants were pressured by an authority figure to administer what they believed were <strong>lethal electric shocks</strong> to another person. ~65% complied to the maximum voltage. Revealed frightening obedience to authority — but caused severe psychological distress to participants without proper safeguards.</div>
+      </div>
+      <div class="ethics-card">
+        <div class="ec-year">1971</div>
+        <div class="ec-name">🏛️ Stanford Prison Experiment</div>
+        <div class="ec-desc">Students were randomly assigned as "guards" or "prisoners" in a mock prison. The guard group became <strong>sadistic and abusive</strong> within days, causing severe psychological stress to the "prisoners." The experiment had to be terminated early. No adequate safeguards or oversight existed.</div>
+      </div>
+    </div>
+    <div class="box box-important">
+      <div class="box-label">⚠️ Why This Matters for Exams</div>
+      <p>These cases are the <em>motivation</em> for the Belmont Report (1979) and all modern IRB requirements. If asked "why was the Belmont Report necessary?" or "why do IRBs exist?" — these four cases are your answer. Know each experiment's year and its specific ethical violation.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     4.3.2 THE BELMONT REPORT
+═══════════════════════════════════════════ -->
+<div class="section" id="belmont">
+  <div class="section-header">
+    <span class="section-num">4.3.2</span>
+    <h2>The Belmont Report (1979)</h2>
+  </div>
+  <div class="card">
+    <p>Published in <strong>1979</strong> in direct response to the ethical abuses above, the Belmont Report established the <strong>three foundational pillars of modern research ethics</strong>. Every research protocol involving human subjects must satisfy all three.</p>
+
+    <div class="pillars">
+      <div class="pillar">
+        <div class="pillar-icon">👤</div>
+        <div class="pillar-name">1. Respect for Persons</div>
+        <div class="pillar-desc">Participants are <strong>autonomous agents</strong> who must be fully informed and freely consenting. Requires <strong>Informed Consent</strong>. Special protections for those with <em>diminished autonomy</em> (minors, cognitively impaired individuals).</div>
+      </div>
+      <div class="pillar">
+        <div class="pillar-icon">⚕️</div>
+        <div class="pillar-name">2. Beneficence</div>
+        <div class="pillar-desc">The <strong>"Do No Harm"</strong> principle. Researchers must systematically maximize potential benefits and minimize all possible harms and risks to participants. The benefits to society must outweigh the risks to individuals.</div>
+      </div>
+      <div class="pillar">
+        <div class="pillar-icon">⚖️</div>
+        <div class="pillar-name">3. Justice</div>
+        <div class="pillar-desc"><strong>Fair distribution</strong> of the burdens and benefits of research. Vulnerable populations (the poor, prisoners, minorities) must not be exploited to generate knowledge that primarily benefits others. Research burdens should not fall disproportionately on disadvantaged groups.</div>
+      </div>
+    </div>
+
+    <div class="box box-concept">
+      <div class="box-label">🧠 Deep Dive: Informed Consent</div>
+      <p>Informed Consent is a critical application of "Respect for Persons." <strong>It is an ongoing process, not a one-time signature.</strong> Participants must be told: (1) the purpose and procedures of the study, (2) any foreseeable risks, (3) potential benefits, (4) that participation is voluntary and they can withdraw at any time. If new information emerges mid-study, consent must be re-obtained.</p>
+    </div>
+
+    <div class="box box-example">
+      <div class="box-label">🔍 Connecting History to Principles</div>
+      <p><strong>Nazi Experiments</strong> violated all three pillars (especially Respect for Persons — zero consent). <strong>Tuskegee</strong> violated Beneficence (harm was done, cure withheld) and Justice (exploited a marginalized group). <strong>Milgram</strong> violated Respect for Persons and Beneficence (psychological harm, deception without proper debriefing). <strong>Stanford</strong> violated Beneficence (inadequate risk minimization).</p>
+    </div>
+
+    <div class="box box-exam">
+      <div class="box-label">📝 Exam Tip — The Three Pillars</div>
+      <p>The exam will almost certainly test the three Belmont pillars. Memorize: <strong>Respect for Persons</strong> (autonomy + informed consent) · <strong>Beneficence</strong> (do no harm, maximize benefit) · <strong>Justice</strong> (fair distribution, don't exploit vulnerable groups). Know a one-line description of each.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     4.3.3 IRBS & MODERN REQUIREMENTS
+═══════════════════════════════════════════ -->
+<div class="section" id="irb">
+  <div class="section-header">
+    <span class="section-num">4.3.3</span>
+    <h2>Modern Requirements &amp; IRBs</h2>
+  </div>
+  <div class="card">
+    <p>The Belmont principles are enforced in practice through <strong>Institutional Review Boards (IRBs)</strong> and a set of formal requirements that all researchers must follow.</p>
+
+    <h3>🏛️ What is an IRB?</h3>
+    <div class="box box-concept">
+      <div class="box-label">🧠 Definition</div>
+      <p>An <strong>Institutional Review Board (IRB)</strong> is an <strong>independent committee</strong> — with a minimum of <strong>5 members</strong> — that reviews, approves, and monitors research involving human subjects. No study can begin without IRB clearance. The IRB's job is to ensure the research satisfies all three Belmont pillars before a single participant is recruited.</p>
+    </div>
+
+    <h3>📋 Review Categories</h3>
+    <div class="irb-grid">
+      <div class="irb-card">
+        <div class="irb-label">✅ Exempt</div>
+        <p><strong>Minimal risk</strong> to participants. Examples: standard educational surveys, anonymous questionnaires, observation of public behaviour. No ongoing oversight required.</p>
+      </div>
+      <div class="irb-card">
+        <div class="irb-label">🔍 Expedited</div>
+        <p>Risk is <strong>no more than minimal</strong>. Reviewed by just a <em>subset</em> of the full board rather than requiring a full committee meeting. Faster approval process.</p>
+      </div>
+      <div class="irb-card">
+        <div class="irb-label">🔴 Full Board Review</div>
+        <p><strong>Required</strong> when risks to participants exceed minimal levels. Entire committee reviews and votes on approval. Highest scrutiny level.</p>
+      </div>
+    </div>
+
+    <h3>🚫 Deception — A Special Rule in Economics</h3>
+    <div class="box box-important">
+      <div class="box-label">⚠️ Critical Rule — Economics Prohibits Deception</div>
+      <p>In economics, there is a <strong>dominant norm against the use of objectively false information</strong> in experiments. You <em>cannot</em> lie to participants (e.g., "you are actually playing against a human" when they're playing against a computer). This protects the discipline's credibility — if participants expect to be deceived, their behaviour in all future economics experiments becomes unreliable. <br><br>
+      In other disciplines (like psychology), deception may be used with permission — but it <strong>requires a mandatory debriefing session</strong> afterward, where participants are told the truth about the experiment's real purpose.</p>
+    </div>
+
+    <h3>💾 Data Management Requirements</h3>
+    <div class="box box-concept">
+      <div class="box-label">🧠 What You Need to Plan For</div>
+      <p>Every research protocol must include a clear data management plan covering: (1) <strong>Anonymization</strong> — removing identifiable information; (2) <strong>Password protection</strong> — securing data against unauthorized access; (3) <strong>Data retention policy</strong> — research data must typically be retained for a minimum of <strong>3 years</strong> after the study ends, then properly destroyed.</p>
+    </div>
+
+    <div class="box box-exam">
+      <div class="box-label">📝 Quick-Fire Facts for Exams</div>
+      <p><strong>IRB minimum size:</strong> 5 members. <strong>Economics rule:</strong> No deception. <strong>If other fields use deception:</strong> mandatory debriefing. <strong>Data retention:</strong> minimum 3 years. <strong>Three review types:</strong> Exempt → Expedited → Full Board (in order of increasing risk).</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     4.4 PROJECT AND ASSIGNMENT
+═══════════════════════════════════════════ -->
+<div class="section" id="project">
+  <div class="section-header">
+    <span class="section-num">4.4</span>
+    <h2>Project Design — Putting It All Together</h2>
+  </div>
+  <div class="card">
+    <p>This section covers how to <strong>design and analyze</strong> a valid behavioural experiment — the skills tested in your project/assignment component.</p>
+
+    <h3>⚙️ Core Design Requirements</h3>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <div class="step-title">Causality Over Correlation</div>
+          <div class="step-desc">A simple survey is <strong>not sufficient</strong>. You must have a <strong>randomized component</strong> — randomly assigning participants to conditions — to establish causation. Without randomization, you can only show correlation (which could be driven by a third variable).</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <div class="step-title">Experimental Design: Treatment vs. Control</div>
+          <div class="step-desc">Must include at least <strong>one Treatment group</strong> (receives the intervention/manipulation) and <strong>one Control group</strong> (receives nothing or a neutral condition). The difference in outcomes between these groups is your treatment effect — the causal impact of your intervention.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <div class="step-title">Balance Table — Did Randomization Work?</div>
+          <div class="step-desc">Before analysing outcomes, you must verify that your groups are actually comparable. A <strong>Balance Table</strong> compares baseline <strong>covariates</strong> (background characteristics: age, gender, income, education) between treatment and control groups. If randomization worked correctly, these characteristics should be statistically <em>similar</em> across groups. Any significant difference suggests the randomization failed.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <div class="step-title">Summary Table — Did the Intervention Work?</div>
+          <div class="step-desc">Compares <strong>outcome variables</strong> between treatment and control. Uses appropriate statistical tests: <strong>t-test</strong> for continuous variables (e.g., income, test scores); <strong>Chi-Square test</strong> for binary/categorical variables (e.g., did they donate: yes/no). The difference in outcomes is your estimate of the causal treatment effect.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-body">
+          <div class="step-title">Hypothesis Testing — The Null Hypothesis</div>
+          <div class="step-desc">Hypotheses are formally written in the <strong>negative form</strong>: the <strong>Null Hypothesis (H₀)</strong> states "the treatment has no effect." You then try to <em>reject</em> the null hypothesis. Standard threshold: <strong>alpha (α) = 0.05</strong> — if your p-value is less than 0.05, you reject H₀ and conclude the treatment had a statistically significant effect at the 95% confidence level.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="box box-concept">
+      <div class="box-label">🧠 How It All Connects</div>
+      <p>Think of the sequence: <strong>Randomize</strong> (assign to groups) → <strong>Balance Table</strong> (confirm groups are identical before treatment) → <strong>Implement treatment</strong> → <strong>Summary Table</strong> (compare outcomes) → <strong>Hypothesis Test</strong> (determine statistical significance). This is the full chain of a valid experiment from design to conclusion.</p>
+    </div>
+
+    <h3>🔑 Key Statistical Terms You Must Know</h3>
+    <div class="term-grid">
+      <div class="term-card">
+        <div class="term-name">Null Hypothesis (H₀)</div>
+        <div class="term-def">The default assumption that the treatment has <em>no effect</em>. Written negatively. You attempt to reject it with evidence.</div>
+      </div>
+      <div class="term-card">
+        <div class="term-name">Alpha (α) = 0.05</div>
+        <div class="term-def">The threshold for statistical significance. p &lt; 0.05 means &lt;5% probability the result occurred by chance → reject H₀.</div>
+      </div>
+      <div class="term-card">
+        <div class="term-name">Balance Table</div>
+        <div class="term-def">Tests that treatment &amp; control groups have similar <em>baseline characteristics</em>. Proves randomization worked.</div>
+      </div>
+      <div class="term-card">
+        <div class="term-name">Summary Table</div>
+        <div class="term-def">Compares <em>outcomes</em> between groups. t-test for continuous; Chi-Square for binary.</div>
+      </div>
+      <div class="term-card">
+        <div class="term-name">External Validity</div>
+        <div class="term-def">Can the findings be generalized beyond the specific sample/setting? WEIRD lab experiments have low external validity.</div>
+      </div>
+      <div class="term-card">
+        <div class="term-name">Internal Validity</div>
+        <div class="term-def">Does the experiment actually measure what it claims to? High in randomized lab experiments. Can be threatened by confounders.</div>
+      </div>
+    </div>
+
+    <div class="box box-exam">
+      <div class="box-label">📝 Exam Tip — Balance vs. Summary Tables</div>
+      <p>Students often confuse these two. Remember: <strong>Balance Table = BEFORE treatment, checking COVARIATES (background).</strong> <strong>Summary Table = AFTER treatment, checking OUTCOMES.</strong> The balance table proves your randomization was valid; the summary table shows whether your intervention worked.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     QUICK REVISION SUMMARY
+═══════════════════════════════════════════ -->
+<div class="revision" id="revision">
+  <h2>📚 Quick Revision Summary</h2>
+  <div class="rev-cols">
+    <div class="rev-block">
+      <h4>Key Definitions</h4>
+      <ul>
+        <li><strong>WEIRD:</strong> Western, Educated, Industrialized, Rich, Democratic — the unrepresentative subject pool of most lab experiments</li>
+        <li><strong>External Validity:</strong> The degree to which results can be generalized beyond the sample &amp; setting</li>
+        <li><strong>Incentivization:</strong> Paying participants based on their actual choices to ensure real-world relevance</li>
+        <li><strong>Double-Blind:</strong> Neither participant nor administrator knows who is in treatment vs. control group</li>
+        <li><strong>Social Desirability Bias:</strong> Participants behave "nicely" when they know they're being watched</li>
+        <li><strong>Hawthorne Effect:</strong> Behaviour changes simply because of being observed, regardless of treatment</li>
+        <li><strong>Null Hypothesis:</strong> Default statement that treatment has no effect; written negatively to be rejected</li>
+      </ul>
+    </div>
+    <div class="rev-block">
+      <h4>Key People &amp; Experiments</h4>
+      <ul>
+        <li><strong>Lind (1774):</strong> Scurvy + lemons = first controlled trial</li>
+        <li><strong>Fisher:</strong> Formalized randomization; wrote Statistical Methods for Research Workers + Design of Experiments</li>
+        <li><strong>Hill (1948):</strong> Streptomycin + TB = first modern medical RCT</li>
+        <li><strong>Salk (1954):</strong> Polio vaccine, double-blind, Fisher's exact test</li>
+        <li><strong>RAND (1971–82):</strong> Higher copay → less usage, no health harm</li>
+        <li><strong>Burtless &amp; Hausman (1977):</strong> Negative income tax → no labor supply effect, ↑ divorce</li>
+        <li><strong>Dresher &amp; Flood (1950):</strong> First Prisoner's Dilemma in lab; humans rarely hit Nash Eq.</li>
+        <li><strong>Güth et al. (1982):</strong> Ultimatum Game — fairness rejects low offers</li>
+        <li><strong>Gneezy &amp; List:</strong> Matrilineal vs. patriarchal → gender gap in competition is nurture</li>
+        <li><strong>Banerjee, Duflo, Kremer:</strong> Nobel laureates — RCTs as gold standard for policy</li>
+      </ul>
+    </div>
+    <div class="rev-block">
+      <h4>Ethics Timeline</h4>
+      <ul>
+        <li><strong>1932–72:</strong> Tuskegee (syphilis, penicillin denied)</li>
+        <li><strong>1943–45:</strong> Nazi experiments (twins, no consent)</li>
+        <li><strong>1961:</strong> Milgram (obedience, fake electric shocks)</li>
+        <li><strong>1971:</strong> Stanford Prison (guards turned sadistic)</li>
+        <li><strong>1979:</strong> Belmont Report — Respect for Persons + Beneficence + Justice</li>
+        <li><strong>IRB:</strong> Min. 5 members, Exempt → Expedited → Full Board</li>
+        <li><strong>Economics rule:</strong> No deception ever</li>
+        <li><strong>Other fields:</strong> Deception OK but needs debriefing</li>
+        <li><strong>Data retention:</strong> Minimum 3 years</li>
+      </ul>
+    </div>
+  </div>
+  <div class="must-remember">
+    <h4>✅ Must-Remember Points</h4>
+    <ul>
+      <li>Economics <strong>prohibits deception</strong> to maintain discipline credibility — any deception destroys trust in future results</li>
+      <li>RCTs are the <strong>"gold standard" for policy evaluation</strong> — linked to Banerjee, Duflo, and Kremer (Nobel 2019)</li>
+      <li><strong>Balance tables prove randomization worked</strong> by showing treatment and control groups are statistically identical in baseline characteristics</li>
+      <li><strong>Informed Consent is an ongoing process</strong>, not a one-time signature — participants can withdraw at any time</li>
+      <li>The gender gap in competitiveness is <strong>nurture, not nature</strong> — Gneezy &amp; List's cross-cultural study proved this</li>
+      <li>Field experiments remove <strong>Social Desirability Bias</strong> AND the <strong>Hawthorne Effect</strong> because participants don't know they're being studied</li>
+      <li>Null hypothesis is always written <strong>negatively</strong> (no effect), tested at <strong>α = 0.05</strong> — reject H₀ when p &lt; 0.05</li>
+      <li>RAND: more copay → less healthcare usage → <strong>without necessarily harming health</strong> (the "without harming health" part is the surprising finding)</li>
+      <li>Negative Income Tax surprise: <strong>increased divorce rates</strong>, not reduced labor supply (which had no effect)</li>
+    </ul>
+  </div>
+</div>
+
+</div><!-- /container -->
+
+<footer>
+  <p>Behavioural Economics · Module 4 Study Guide &nbsp;|&nbsp; Built for <span>AceDBE</span> &nbsp;·&nbsp; All concepts sourced directly from course material</p>
+</footer>
+
+<button id="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+  // Progress bar
+  window.addEventListener('scroll', () => {
+    const doc = document.documentElement;
+    const scrolled = doc.scrollTop / (doc.scrollHeight - doc.clientHeight) * 100;
+    document.getElementById('progress-bar').style.width = scrolled + '%';
+    const btn = document.getElementById('scroll-top');
+    btn.classList.toggle('visible', doc.scrollTop > 400);
+  });
+</script>
+</body>
+</html>
